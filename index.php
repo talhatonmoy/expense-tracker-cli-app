@@ -9,8 +9,6 @@ $data = [
     'total' => ''
 ];
 
-
-
 $fileSystem = new ET_FileSystem();
 while (true) {
     $menuInput = RunMenu();
@@ -19,22 +17,22 @@ while (true) {
     if ('1' === $menuInput) {
 
         $incomeAmount = ReceiveNumericValue('Enter The Amount');
+        $incomeSource = ReceiveAlphabaticValue('Enter Income Source');
 
-        if (array_push($data['income'], $incomeAmount)) {
+        if ($data['income'][$incomeSource] = $incomeAmount) {
             $fileSystem->WriteData($data, $type = 'income');
             $fileSystem->RunTotalCalculation();
             echo 'Income Added Successfully' . "\n";
-            $data['income'] = [];
             echo SEPARATOR . "\n\n";
         }
     } elseif ('2' === $menuInput) {
         $expenseAmount = ReceiveNumericValue('Enter The Amount');
+        $expenseSource = ReceiveAlphabaticValue('Enter Expense Source');
 
-        if (array_push($data['expense'], $expenseAmount)) {
+        if ($data['expense'][$expenseSource] = $expenseAmount) {
             $fileSystem->WriteData($data, $type = 'expense');
             $fileSystem->RunTotalCalculation();
             echo 'Expense Added Successfully' . "\n";
-            $data['expense'] = [];
             echo SEPARATOR . "\n\n";
         }
     } elseif ('3' === $menuInput) {
@@ -44,8 +42,10 @@ while (true) {
         echo "List Of Your Income \n";
         echo SEPARATOR;
 
-        foreach ($income as $key => $value) {
-            echo $key + 1 . " " . $value . "\n";
+        $n = 0;
+        foreach ($income as $source => $amount) {
+            $n++;
+            echo "{$n}. {$source} = {$amount} \n";
         }
     } elseif ('4' === $menuInput) {
         $expense = $fileSystem->ReadData()['expense'];
@@ -54,8 +54,10 @@ while (true) {
         echo "List Of Your Expense \n";
         echo SEPARATOR;
 
-        foreach ($expense as $key => $value) {
-            echo $key + 1 . " " . $value . "\n";
+        $n = 0;
+        foreach ($expense as $source => $amount) {
+            $n++;
+            echo "{$n}. {$source} = {$amount} \n";
         }
     } elseif ('5' === $menuInput) {
         $calculate = new Calculator();
@@ -75,10 +77,34 @@ while (true) {
         echo "01 Your Total Income  = {$totalIncome} \n";
         echo "02 Your Total Expense = {$totalExpense} \n";
         echo "03 Net                = {$net}\n";
+    } elseif ('6' === $menuInput) {
+        $expense = $fileSystem->ReadData()['expense'];
+        $income = $fileSystem->ReadData()['income'];
+
+        echo "\n";
+        echo SEPARATOR ;
+        echo "List Of Your Income Sources \n";
+        echo SEPARATOR;
+
+        $incomeSources = array_keys($income);
+        foreach ($incomeSources as $index => $sourceName){
+            echo $index+1 . ". {$sourceName} \n";
+        }
+
+        echo "\n\n";
+
+        echo SEPARATOR;
+        echo "List Of Your Expense Sources \n";
+        echo SEPARATOR;
+
+        $expensSources = array_keys($expense);
+        foreach ($expensSources as $index => $sourceName) {
+            echo $index + 1 . ". {$sourceName} \n";
+        }
+        
     }
 
-    echo SEPARATOR . "\n\n";
-    // $viewMenu = readline('Go To Menu ? (y/n) :');
+    echo "\n\n";
     $viewMenu = ReceiveYesOrNoValue('Go To Menu ? (y/n)');
     if ('n' == $viewMenu) {
         break;

@@ -59,10 +59,9 @@ class Calculator
     {
         $total = 0;
 
-        foreach ($amounts as $amount) {
-            $total += $amount;
+        foreach ($amounts as $key =>  $amount) {
+            $total +=  intval($amount);
         }
-
         return $total;
     }
 }
@@ -98,7 +97,7 @@ function ReceiveNumericValue($promt)
 {
     while (true) {
         $amount = readline("{$promt}: ");
-        echo SEPARATOR;
+        // echo SEPARATOR;
         if (!is_numeric($amount)) {
             echo 'Please Input A Numeric Data' . "\n";
             echo SEPARATOR;
@@ -117,6 +116,25 @@ function ReceiveYesOrNoValue($promt)
         echo SEPARATOR;
         if (!preg_match('/^[yn]$/', $inputValue)) {
             echo 'Please Input A Valid Option Parameter ( y/n )' . "\n";
+            echo SEPARATOR;
+        } else {
+            break;
+        }
+    }
+
+    return $inputValue;
+}
+
+
+function ReceiveAlphabaticValue($promt)
+{
+    while (true) {
+        $inputValue = readline("{$promt}: ");
+        echo SEPARATOR;
+        $pattern = '/^[a-zA-Z0-9\s]+$/';
+
+        if (!preg_match($pattern, $inputValue)) {
+            echo 'Please Input A Valid Source' . "\n";
             echo SEPARATOR;
         } else {
             break;
